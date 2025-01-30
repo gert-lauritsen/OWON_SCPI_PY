@@ -64,7 +64,7 @@ from OWONSerial import SCPICommand
 print(SCPICommand.MEASURE_VOLT.value)  # Outputs: "MEAS:VOLT?"
 ```
 
-### Example SCPI Commands:
+### SCPI Commands:
 | Command | Description |
 |---------|-------------|
 | `SCPICommand.IDENTIFY` | Query device ID |
@@ -72,6 +72,21 @@ print(SCPICommand.MEASURE_VOLT.value)  # Outputs: "MEAS:VOLT?"
 | `SCPICommand.MEASURE_CURRENT` | Measure current |
 | `SCPICommand.BEEP_ON` | Enable device beep |
 | `SCPICommand.BEEP_OFF` | Disable device beep |
+| `SCPICommand.MEASURE_1` | Measure first channel |
+| `SCPICommand.MEASURE_2` | Measure second channel |
+| `SCPICommand.MEASURE_SHOW` | Show measurement results |
+| `SCPICommand.AUTO` | Enable auto-ranging mode |
+| `SCPICommand.RANGE_SET` | Set manual range |
+| `SCPICommand.RATE` | Set measurement rate |
+| `SCPICommand.CONTINUITY_THRESHOLD` | Set continuity test threshold |
+| `SCPICommand.CALC_FUNC` | Enable mathematical functions |
+| `SCPICommand.CALC_DB_REF` | Set reference level for dB calculation |
+| `SCPICommand.CALC_DBM_REF` | Set reference power for dBm calculation |
+| `SCPICommand.CALC_AVERAGE_QUERY` | Query the average measurement |
+| `SCPICommand.CALC_MIN_QUERY` | Query the minimum measurement |
+| `SCPICommand.CALC_MAX_QUERY` | Query the maximum measurement |
+| `SCPICommand.CALC_OFF` | Disable all calculations |
+| `SCPICommand.RESET` | Reset the device |
 
 ## Command-Line Usage
 You can also run the script directly from the terminal:
