@@ -9,6 +9,10 @@ import time
 import OWONSerial
 import argparse
 import sys
+import matplotlib.pyplot as plt
+import keyboard
+import csv
+import datetime
 
 from OWONSerial import SCPICommand
 # Configuration
@@ -16,7 +20,37 @@ from OWONSerial import SCPICommand
 XDM1141_ADDRESS = "ASRL3::INSTR"  # Replace with your device's VISA address
 MEASUREMENT_INTERVAL = 1  # Interval between measurements (in seconds)
 TEST_DURATION = 60  # Total test duration (in seconds)
+CHECK_INTERVAL = 0.1       # Check for keypress every 0.1s
 
+def plot_voltage_curve(timestamps, voltages):
+    """Plots the voltage curve over time."""
+    plt.figure(figsize=(10, 6))
+    plt.plot(timestamps, voltages, label="Voltage", color="blue", linewidth=2)
+
+
+    # Add labels, title, and legend
+    plt.xlabel("Time (s)")
+    plt.ylabel("Voltage (V)")
+    plt.title("Voltage vs Time")
+    plt.legend()
+    plt.grid()
+    plt.show()
+
+def SaveToCSV (timestamps, voltages):
+    # Generate filename based on current date & time
+    current_time = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+    filename = f"{current_time}_voltage.dat"
+    with open(filename, mode="w", newline="") as file:
+        writer = csv.writer(file)
+    
+        # Write header
+        writer.writerow(["Timestamp", "Voltage"])
+    
+        # Write data
+        for ts, v in zip(timestamps, voltages):
+            writer.writerow([ts, v])
+
+    print("CSV file saved as 'data.csv'")    
 
 def main():
     # Parse command-line arguments
@@ -42,7 +76,9 @@ def main():
         idn = device.sendcmd(SCPICommand.IDENTIFY.value)
         device.sendcmd(SCPICommand.CONF_VOLT_DC_AUTO.value)        
         print(f"Device ID: {idn}")
-        while True:
+        print("Press q to stop measurement")
+        measurement=True
+        while measurement:
             # Perform voltage and current measurements
             V= float(device.sendcmd(SCPICommand.MEASURE_VOLT.value).replace('V', ''))
             # Store data
@@ -53,13 +89,22 @@ def main():
             print(f"Time: {elapsed_time:.2f}s, {V:.5f} V")
 
             # Wait for the next measurement interval
-            time.sleep(MEASUREMENT_INTERVAL)
+            elapsed_time = 0
+            while elapsed_time < MEASUREMENT_INTERVAL:
+                if keyboard.is_pressed('q'):  # Check if 'q' is pressed
+                    print("Measurement stopped!")
+                    measurement=False  # Exit program immediately (or use `break` if inside another loop)
+        
+                time.sleep(CHECK_INTERVAL)
+                elapsed_time += CHECK_INTERVAL
     except Exception as e:
         print(f"Error: {e}")
     finally:
-        del device    
+        del device
+        plot_voltage_curve(timestamps,voltages)
         print("Measurement completed.")
         # Plot the results
+        key = input("Press Enter to continue...")
 
 if __name__ == "__main__":
     main()
