@@ -2,15 +2,15 @@
 """
 Created on Thu Jan 30 20:57:28 2025
 
-@author: gert
+@author: gert lauritsen
 """
 
-#import pyvisa
 import time
 import OWONSerial
 import argparse
+import sys
 
-
+from OWONSerial import SCPICommand
 # Configuration
 
 XDM1141_ADDRESS = "ASRL3::INSTR"  # Replace with your device's VISA address
@@ -25,7 +25,8 @@ def main():
     parser.add_argument('--baudrate', type=int, default=115200, help='Baud rate for communication (default: 115200)')
     parser.add_argument('--duration', type=int, default=7200, help='Duration of the measurement in seconds (default: 60)')
     parser.add_argument('--interval', type=float, default=1.0, help='Interval between measurements in seconds (default: 1.0)')
-
+    
+    print(sys.modules.get("OWONSerial"))
     # Prepare data storage
     timestamps = []
     voltages = []
@@ -39,16 +40,17 @@ def main():
 
         # Query device identification
         idn = device.sendcmd(SCPICommand.IDENTIFY.value)
+        device.sendcmd(SCPICommand.CONF_VOLT_DC_AUTO.value)        
         print(f"Device ID: {idn}")
         while True:
             # Perform voltage and current measurements
-            V=device.sendcmd(SCPICommand.MEASURE_VOLT.value)
+            V= float(device.sendcmd(SCPICommand.MEASURE_VOLT.value).replace('V', ''))
             # Store data
 
             voltages.append(V)
             elapsed_time = time.time() - start_time
             timestamps.append(elapsed_time)
-            print(f"Time: {elapsed_time:.2f}s, Voltage: {V:.5f} V")
+            print(f"Time: {elapsed_time:.2f}s, {V:.5f} V")
 
             # Wait for the next measurement interval
             time.sleep(MEASUREMENT_INTERVAL)
@@ -58,3 +60,6 @@ def main():
         del device    
         print("Measurement completed.")
         # Plot the results
+
+if __name__ == "__main__":
+    main()

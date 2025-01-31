@@ -197,7 +197,7 @@ def main():
     parser.add_argument('--port', default='COM3', help='Serial port for the XDM1041 (e.g., COM3 or /dev/ttyUSB0)')
     parser.add_argument('--baudrate', type=int, default=115200, help='Baud rate for communication (default: 115200)')
     parser.add_argument('--duration', type=int, default=7200, help='Duration of the measurement in seconds (default: 60)')
-    parser.add_argument('--interval', type=float, default=60.0, help='Interval between measurements in seconds (default: 1.0)')
+    parser.add_argument('--interval', type=float, default=10.0, help='Interval between measurements in seconds (default: 1.0)')
 
     args = parser.parse_args()
 
