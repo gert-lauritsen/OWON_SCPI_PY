@@ -18,31 +18,31 @@ from enum import Enum
 
 class SCPICommand(Enum):
     # System Commands
-    IDENTIFY = "*IDN?"
-    REMOTE_MODE = "SYST:REM"
-    LOCAL_MODE = "SYST:LOC"
+    IDENTIFY = "*IDN?"                  # Query device identification (manufacturer, model, serial number, firmware version)
+    REMOTE_MODE = "SYST:REM"            # Set device to remote control mode
+    LOCAL_MODE = "SYST:LOC"             # Return device to local (manual) control mode
 
     # Measurement Commands
-    MEASURE = "MEAS?"
-    MEASURE_VOLT = "MEAS:VOLT?"
-    MEASURE_CURRENT = "MEAS:CURRENT?"
+    MEASURE = "MEAS?"                   # Query the latest measurement (depends on the current function mode)
+    MEASURE_VOLT = "MEAS:VOLT?"         # Query the measured voltage
+    MEASURE_CURRENT = "MEAS:CURRENT?"   # Query the measured current
 
     # Function Selection
-    FUNCTION = "FUNC?"
-    
+    FUNCTION = "FUNC?"                  # Query the current function mode (Voltage, Current, Resistance, etc.)
+
     # Configuration Commands
-    CONF_VOLT_DC_AUTO = "CONF:VOLT:DC AUTO"
-    CONF_VOLT_DC = "CONF:VOLT:DC"
-    CONF_CURR_DC_AUTO = "CONF:CURR:DC AUTO"
-    CONF_CURR_DC = "CONF:CURR:DC"
-    CONF_RES_AUTO = "CONF:RES AUTO"
-    
+    CONF_VOLT_DC_AUTO = "CONF:VOLT:DC AUTO"  # Configure voltage measurement in DC auto-ranging mode
+    CONF_VOLT_DC = "CONF:VOLT:DC"       # Configure voltage measurement in DC mode (manual range)
+    CONF_CURR_DC_AUTO = "CONF:CURR:DC AUTO"  # Configure current measurement in DC auto-ranging mode
+    CONF_CURR_DC = "CONF:CURR:DC"       # Configure current measurement in DC mode (manual range)
+    CONF_RES_AUTO = "CONF:RES AUTO"     # Configure resistance measurement in auto-ranging mode
+
     # Beep Control
-    BEEP_ON = "BEEP:STAT ON"
-    BEEP_OFF = "BEEP:STAT OFF"
+    BEEP_ON = "BEEP:STAT ON"            # Enable device beep sound
+    BEEP_OFF = "BEEP:STAT OFF"          # Disable device beep sound
 
     # Reset
-    RESET = "*RST"
+    RESET = "*RST"                      # Reset the device to factory default settings
 
 
 
