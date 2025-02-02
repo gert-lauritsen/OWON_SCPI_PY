@@ -210,8 +210,10 @@ def main():
         idn = device.sendcmd(SCPICommand.IDENTIFY.value)
         print(f"Device ID: {idn}")
 
+        print(device.sendcmd(SCPICommand.BEEP_STATUS.value))
+
         # Perform voltage and current measurements
-        measure_voltage_current(device, args.duration, args.interval)
+       # measure_voltage_current(device, args.duration, args.interval)
 
     except Exception as e:
         print(f"Error: {e}")

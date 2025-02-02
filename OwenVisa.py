@@ -55,20 +55,21 @@ def measure_voltage_current(device, duration, interval):
 
     elapsed_time = 0
     start_time = time.time()
+    cycle_time=interval/2
     while elapsed_time < duration:
         try:
             cycle_start = time.time()
 
             # Measure voltage
             device.write (SCPICommand.CONF_VOLT_DC_AUTO.value)
-            time.sleep(3)
+            time.sleep(cycle_time/2)
             voltage = float(device.query(SCPICommand.MEASURE_VOLT.value).replace('V', ''))
 
             # Measure current
             device.write(SCPICommand.CONF_CURR_DC_AUTO.value)
-            time.sleep(3)
+            time.sleep(cycle_time/2)
             current = float(device.query(SCPICommand.MEASURE_CURRENT.value).replace('A', ''))
-
+            elapsed_time = time.time()-start_time
             print(f"{elapsed_time:6.1f}, {voltage:9.5f}, {current:9.5f}")
 
         except Exception as e:
@@ -76,9 +77,6 @@ def measure_voltage_current(device, duration, interval):
 
         # Adjust sleep time
         cycle_time = time.time() - cycle_start
-        sleep_time = max(0, interval - cycle_time)
-        time.sleep(sleep_time)
-        elapsed_time += interval
 
     print("Measurements completed.")
 
